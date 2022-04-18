@@ -1,7 +1,3 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier 
-from sklearn import metrics
 from flask import Flask, request, render_template
 import pickle
 
@@ -19,26 +15,22 @@ def loadPage():
 @app.route("/predict", methods=['POST'])
 def predict():
     
-    inputQuery1 = request.form['n']
-    inputQuery2 = request.form['p']
-    inputQuery3 = request.form['k']
-    inputQuery4 = request.form['temp']
-    inputQuery5 = request.form['hum']
-    inputQuery6 = request.form['moisture']
+    inputQuery1 = int(request.form['n'])
+    inputQuery2 = int(request.form['p'])
+    inputQuery3 = int(request.form['k'])
+    inputQuery4 = float(request.form['temp'])
+    inputQuery5 = float(request.form['hum'])
+    inputQuery6 = float(request.form['moisture'])
 
     model = pickle.load(open("model.sav", "rb"))
     
     
     data = [[inputQuery4, inputQuery5, inputQuery6, inputQuery1, inputQuery2, inputQuery3]]
-    new_df = pd.DataFrame(data, columns = ['Temparature', 'Humidity', 'Moisture', 'Nitrogen', 'Potassium', 'Phosphorous'])
     
-    single = model.predict(new_df)
-    probablity = model.predict_proba(new_df)[:,1]
+    single = model.predict(data)
     
-    o1 = single
-    o2 = "Confidence: {}".format(probablity*100)
         
-    return render_template('index.html', output1=o1, output2=o2, query1 = request.form['query1'], query2 = request.form['query2'],query3 = request.form['query3'],query4 = request.form['query4'],query5 = request.form['query5'], query6 = request.form['query6'])
+    return render_template('index.html', output1=single[0], query1 = inputQuery1, query2 = inputQuery2,query3 = inputQuery3 ,query4 = inputQuery4, query5 = inputQuery5, query6 = inputQuery6)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
