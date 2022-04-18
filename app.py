@@ -25,7 +25,7 @@ def predict():
     model = pickle.load(open("model.sav", "rb"))
     
     
-    data = [[inputQuery4, inputQuery5, inputQuery6, inputQuery1, inputQuery2, inputQuery3]]
+    data = [[inputQuery4, inputQuery5, inputQuery6, inputQuery1, inputQuery3, inputQuery2]]
     
     single = model.predict(data)
     
