@@ -1,8 +1,9 @@
 from flask import Flask, request, render_template
 import pickle
+from flask_cors import CORS
 
 app = Flask("__name__")
-
+CORS(app)
 
 
 q = ""
